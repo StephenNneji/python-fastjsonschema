@@ -135,11 +135,13 @@ class CodeGenerator:
         """
         Generate validation function for given uri with given name
         """
+        temp = uri.rsplit('#/definitions/', 1)
+        pretty_name = temp[1] if len(temp) == 2 else 'data'
         self._validation_functions_done.add(uri)
         self.l('')
         with self._resolver.resolving(uri) as definition:
             with self.l('def {}(data):', name):
-                self.generate_func_code_block(definition, 'data', 'data', clear_variables=True)
+                self.generate_func_code_block(definition, 'data', pretty_name, clear_variables=True)
                 self.l('return data')
 
     def generate_func_code_block(self, definition, variable, variable_name, clear_variables=False):
